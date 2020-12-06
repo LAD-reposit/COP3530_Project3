@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <string> 
+#include "pixel.h"
+#include "TGAdecon.h"
 using namespace std;
 using namespace std::chrono;
 int main()
@@ -9,6 +11,9 @@ int main()
 	vector<Pixel> pixels;
 	int choice;
 	bool running = true;
+	string selection = "";
+	TGAdecon file;
+
 	while (running)
 	{
 		cout << "Which image's pixels do you want to sort?" << endl;
@@ -19,10 +24,13 @@ int main()
 		cin >> choice;
 		if (choice == 1)
 			// READ IN COLOR EXPLOSION TO VECTOR OF PIXELS
+			selection = "./image_input/color_explosion.tga";
 		else if (choice == 2)
 			// READ IN MICKEY MOUSE TO VECTOR OF PIXELS
+			selection = "./image_input/MickeyMouse.tga"
 		else if (choice == 3)
 			// READ IN BUCHAREST TO VECTOR OF PIXELS
+			selection = "./image_input/map.tga";
 		else if (choice == 4)
 		{
 			running = false;
@@ -30,6 +38,16 @@ int main()
 		}
 		else
 			cout << "Invalid Response." << endl;
+
+		if (selection != "") 
+		{
+			file.header = file.getHeader(selection);
+			ifstream fil;
+			fil.open(selection, ios_base::in | ios_base::binary);
+			fil.seekg(18);
+			vector<pixel> pixels = file.inputPixels(fil);
+			fil.close();
+		}
 
 		cout << "Which color would you like to sort by?" << endl;
 		cout << "1. Red" << endl;
