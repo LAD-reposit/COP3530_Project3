@@ -2,16 +2,9 @@ using namespace std;
 #include <vector>
 #include <string>
 
-class Pixels{
-    private:
-    public:
-        void mergeSort(vector<Pixels> pixelVec, string pixelColor, int left, int right);
-        void merge(vector<Pixels> pixelVec, string pixelColor, int left, int mid, int right);
-};
 
 //sources: Sorting 2 powerpoint by Professor Kapoor
-
-void Pixels::merge(vector<Pixels> pixelVec, string pixelColor, int left, int mid, int right){
+void merge(vector<Pixels> pixelVec, string pixelColor, int left, int mid, int right){
     
     if(pixelColor == "Red"){ //if the user wants to merge sort by red
         int n1 = mid - left + 1;
@@ -145,7 +138,7 @@ void Pixels::merge(vector<Pixels> pixelVec, string pixelColor, int left, int mid
 
 
 
-void Pixels::mergeSort(vector<Pixels> pixelVec, string pixelColor, int left, int right){ //sorting function that calls the helper sort
+void mergeSort(vector<Pixels> pixelVec, string pixelColor, int left, int right){ //sorting function that calls the helper sort
     if (left < right){
         int mid = left +(right - left)/2; //splits vector and then sorts each part
         mergeSort(pixelVec, pixelColor, left, mid);
