@@ -1,0 +1,72 @@
+void DisplayImage(string image)
+{
+	if (image == "Color Explosion")
+	{
+		sf::RenderWindow window(sf::VideoMode(100, 100), "Color Explosion Gradient");
+
+		sf::Texture gradientTexture;
+		string filePath = "./image_output/";
+		filePath += image;
+		gradientTexture.loadFromFile(filePath);
+		sf::Sprite gradient(gradientTexture);
+
+		while (window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+
+				gradient.setPosition(0, 0);
+				window.draw(gradient);
+			}
+		}
+	}
+	else if (image == "Mickey Mouse")
+	{
+		sf::RenderWindow window(sf::VideoMode(1000, 1000), "Mickey Mouse Gradient");
+
+		sf::Texture gradientTexture;
+		string filePath = "./image_output/";
+		filePath += image;
+		gradientTexture.loadFromFile(filePath);
+		sf::Sprite gradient(gradientTexture);
+
+		while (window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+
+				gradient.setPosition(0, 0);
+				window.draw(gradient);
+			}
+		}
+	}
+	else if (image == "Bucharest")
+	{
+		sf::RenderWindow window(sf::VideoMode(10916, 9985), "Bucharest Gradient");
+
+		sf::Texture gradientTexture;
+		string filePath = "./image_output/";
+		filePath += image;
+		gradientTexture.loadFromFile(filePath);
+		sf::Sprite gradient(gradientTexture);
+
+		while (window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+
+				gradient.setPosition(0, 0);
+				window.draw(gradient);
+			}
+		}
+	}
+}
