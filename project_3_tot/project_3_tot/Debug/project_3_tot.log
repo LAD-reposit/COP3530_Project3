@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Users\Lindsay Dobrie\Desktop\Fall_2020\COP3530\Projects\Project3\project_3_tot\project_3_tot\main.cpp(529,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\Lindsay Dobrie\Desktop\Fall_2020\COP3530\Projects\Project3\project_3_tot\project_3_tot\main.cpp(543,20): warning C4018:  '<': signed/unsigned mismatch
+  project_3_tot.vcxproj -> C:\Users\Lindsay Dobrie\Desktop\Fall_2020\COP3530\Projects\Project3\project_3_tot\Debug\project_3_tot.exe

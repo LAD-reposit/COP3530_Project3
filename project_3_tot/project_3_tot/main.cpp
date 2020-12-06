@@ -5,9 +5,76 @@
 #include <string> 
 using namespace std;
 using namespace std::chrono;
+
+
+class pixel
+{
+	unsigned char red;
+	unsigned char green;
+	unsigned char blue;
+public:
+
+	pixel();
+	pixel(unsigned char red, unsigned char green, unsigned char blue);
+
+	unsigned char getRed();
+	unsigned char getGreen();
+	unsigned char getBlue();
+	void setRed(unsigned char red);
+	void setGreen(unsigned char green);
+	void setBlue(unsigned char blue);
+};
+struct Head
+{
+	char  idLength;
+	char  colorMapType;
+	char  dataTypeCode;
+	short colorMapOrigin;
+	short colorMapLength;
+	char  colorMapDepth;
+	short xOrigin;
+	short yOrigin;
+	short width;
+	short height;
+	char  bitsPerPixel;
+	char  imageDescriptor;
+
+	Head();
+};
+class TGAdecon
+{
+public:
+	Head header;
+	string fil;
+	int option;
+
+	//default
+	TGAdecon();
+
+	//get a file name
+	string whichFile(int selection);
+	string whichOutput(string option, string bubb);
+
+	//format/structure
+	Head getHeader(string file);
+	pixel findPix(ifstream& file);
+	vector<pixel> inputPixels(ifstream& file);
+
+	//write it into the output file
+	void writeFile(ofstream& a, Head& b, vector<pixel> pixels);
+
+	//testing
+	void printPixels(vector<pixel> pix);
+};
+
+void merge(vector<pixel>& pixelVec, string pixelColor, int left, int mid, int right);
+void mergeSort(vector<pixel>& pixelVec, string pixelColor, int left, int right);
+void BubbleSort(vector<pixel>& pixels, string color);
+
 int main()
 {
-	vector<pixel> pixels;
+	vector<pixel> pixels_merge;
+	vector<pixel> pixels_bubble;
 	int choice;
 	bool running = true;
 	string selection = "";
@@ -46,7 +113,8 @@ int main()
 			ifstream fil;
 			fil.open(selection, ios_base::in | ios_base::binary);
 			fil.seekg(18);
-			pixels = file.inputPixels(fil);
+			pixels_merge = file.inputPixels(fil);
+			pixels_bubble = pixels_merge;
 			fil.close();
 		}
 
@@ -57,18 +125,18 @@ int main()
 		cout << "4. Quit" << endl;
 		cin >> choice;
 
-		long bubbleTime, mergeTime;
+		std::chrono::microseconds bubbleTime, mergeTime;
 		if (choice == 1)
 		{
 			// START TIMER
 			auto startBubble = high_resolution_clock::now();
-			BubbleSort(pixels, "Red");
+			BubbleSort(pixels_bubble, "Red");
 			auto stopBubble = high_resolution_clock::now();
 			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble);
 			// STOP TIMER, START NEW TIMER
-			int size = sizeof(pixels) / sizeof(pixels[0].getRed());
+			int size = pixels_merge.size();
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Red", 0, size - 1);
+			mergeSort(pixels_merge, "Red", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -77,13 +145,13 @@ int main()
 		{
 			// START TIMER
 			auto startBubble = high_resolution_clock::now();
-			BubbleSort(pixels, "Green");
+			BubbleSort(pixels_bubble, "Green");
 			auto stopBubble = high_resolution_clock::now();
 			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble);
 			// STOP TIMER, START NEW TIMER
-			int size = sizeof(pixels) / sizeof(pixels[0].getGreen());
+			int size = pixels_merge.size();
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Green", 0, size - 1);
+			mergeSort(pixels_merge, "Green", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -92,13 +160,13 @@ int main()
 		{
 			// START TIMER
 			auto startBubble = high_resolution_clock::now();
-			BubbleSort(pixels, "Blue");
+			BubbleSort(pixels_bubble, "Blue");
 			auto stopBubble = high_resolution_clock::now();
 			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble);
 			// STOP TIMER, START NEW TIMER
-			int size = sizeof(pixels) / sizeof(pixels[0].getBlue());
+			int size = pixels_merge.size();
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Blue", 0, size - 1);
+			mergeSort(pixels_merge, "Blue", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -112,15 +180,25 @@ int main()
 			cout << "Invalid Response." << endl;
 
 		// WRITE SORTED PIXELS TO FILE
-		string outfile = file.whichOutput(selection);
+		file.printPixels(pixels_merge);
+		string merg = "merge_";
+		string bubb = "bubble_";
+
+		string outfile_merge = file.whichOutput(selection, merg);
 		ofstream clos;
-		clos.open(outfile, ios_base::out | ios_base::binary);
-		file.writeFile(clos, file.header, pixels);
+		clos.open(outfile_merge, ios_base::out | ios_base::binary);
+		file.writeFile(clos, file.header, pixels_merge);
 		clos.close();
 
+		string outfile_bubble = file.whichOutput(selection, bubb);
+		ofstream cl;
+		cl.open(outfile_bubble, ios_base::out | ios_base::binary);
+		file.writeFile(cl, file.header, pixels_bubble);
+		cl.close();
+
 		// DISPLAY GRADIENT
-		cout << "Running time for Bubble Sort: " << bubbleTime << endl; // DISPLAY BUBBLE SORT TIME
-		cout << "Running time for Merge Sort: " << mergeTime << endl; // DISPLAY MERGE SORT TIME
+		cout << "Running time for Bubble Sort: " << bubbleTime.count() << endl; // DISPLAY BUBBLE SORT TIME
+		cout << "Running time for Merge Sort: " << mergeTime.count() << endl; // DISPLAY MERGE SORT TIME
 
 		if (mergeTime < bubbleTime)
 		{
@@ -136,67 +214,193 @@ int main()
 	return 0;
 }
 
-struct Head
+//sources: Sorting 2 powerpoint by Professor Kapoor
+void merge(vector<pixel>& pixelVec, string pixelColor, int left, int mid, int right) {
+
+	if (pixelColor == "Red") { //if the user wants to merge sort by red
+		int n1 = mid - left + 1;
+		int n2 = right - mid;
+
+		vector<unsigned char> X; //left
+		vector<unsigned char> Y; //right
+
+		for (int i = 0; i < n1; i++) { //sorting
+			X.push_back(pixelVec[left + i].getRed());
+		}
+		for (int j = 0; j < n2; j++) {
+			Y.push_back(pixelVec[mid + 1 + j].getRed());
+		}
+
+		int i = 0;
+		int j = 0;
+		int k = left;
+
+		while (i < n1 && j < n2) { //sorting part
+			if (X[i] <= Y[j]) {
+				pixelVec[k].setRed(X[i]);
+				i++;
+			}
+			else {
+				pixelVec[k].setRed(Y[j]);
+				j++;
+			}
+			k++;
+		}
+
+		while (i < n1) { //sorting parts
+			pixelVec[k].setRed(X[i]);
+			i++;
+			k++;
+		}
+
+		while (j < n2) { //sorting parts
+			pixelVec[k].setRed(Y[j]);
+			j++;
+			k++;
+		}
+	}
+
+	else if (pixelColor == "Green") { //if the user wants to merge sort by green
+		int n1 = mid - left + 1;
+		int n2 = right - mid;
+
+		vector<unsigned char> X; //left
+		vector<unsigned char> Y; //right
+
+		for (int i = 0; i < n1; i++) { //sorting
+			X.push_back(pixelVec[left + i].getGreen());
+		}
+		for (int j = 0; j < n2; j++) {
+			Y.push_back(pixelVec[mid + 1 + j].getGreen());
+		}
+
+		int i = 0;
+		int j = 0;
+		int k = left;
+
+		while (i < n1 && j < n2) { //sorting part
+			if (X[i] <= Y[j]) {
+				pixelVec[k].setGreen(X[i]);
+				i++;
+			}
+			else {
+				pixelVec[k].setGreen(Y[j]);
+				j++;
+			}
+			k++;
+		}
+
+		while (i < n1) { //sorting parts
+			pixelVec[k].setGreen(X[i]);
+			i++;
+			k++;
+		}
+
+		while (j < n2) { //sorting parts
+			pixelVec[k].setGreen(Y[j]);
+			j++;
+			k++;
+		}
+	}
+
+	else if (pixelColor == "Blue") { //if the user wants to merge sort by green
+		int n1 = mid - left + 1;
+		int n2 = right - mid;
+
+		vector<unsigned char> X; //left
+		vector<unsigned char> Y; //right
+
+		for (int i = 0; i < n1; i++) { //sorting
+			X.push_back(pixelVec[left + i].getBlue());
+		}
+		for (int j = 0; j < n2; j++) {
+			Y.push_back(pixelVec[mid + 1 + j].getBlue());
+		}
+
+		int i = 0;
+		int j = 0;
+		int k = left;
+
+		while (i < n1 && j < n2) { //sorting part
+			if (X[i] <= Y[j]) {
+				pixelVec[k].setBlue(X[i]);
+				i++;
+			}
+			else {
+				pixelVec[k].setBlue(Y[j]);
+				j++;
+			}
+			k++;
+		}
+
+		while (i < n1) { //sorting parts
+			pixelVec[k].setBlue(X[i]);
+			i++;
+			k++;
+		}
+
+		while (j < n2) { //sorting parts
+			pixelVec[k].setBlue(Y[j]);
+			j++;
+			k++;
+		}
+	}
+}
+void mergeSort(vector<pixel>& pixelVec, string pixelColor, int left, int right) { //sorting function that calls the helper sort
+	if (left < right) {
+		int mid = left + (right - left) / 2; //splits vector and then sorts each part
+		mergeSort(pixelVec, pixelColor, left, mid);
+		mergeSort(pixelVec, pixelColor, mid + 1, right);
+		merge(pixelVec, pixelColor, left, mid, right); //merges it all together
+	}
+}
+void BubbleSort(vector<pixel>& pixels, string color)
 {
-	char  idLength;
-	char  colorMapType;
-	char  dataTypeCode;
-	short colorMapOrigin;
-	short colorMapLength;
-	char  colorMapDepth;
-	short xOrigin;
-	short yOrigin;
-	short width;
-	short height;
-	char  bitsPerPixel;
-	char  imageDescriptor;
+	bool swapped = true;
 
-	Head();
-};
+	while (swapped)
+	{
+		swapped = false;
 
-class TGAdecon
-{
-public:
-	Head header;
-	string fil;
-	int option;
+		for (unsigned int i = 0; i < pixels.size() - 1; i++)
+		{
+			if (color == "Red")
+			{
+				//unsigned char current = (pixels[i].getRed() - (pixels[i].getBlue() + pixels[i].getGreen()));
+				//unsigned char p1 = pixels[i + 1].getRed() - (pixels[i + 1].getBlue() + pixels[i + 1].getGreen());
 
-	//default
-	TGAdecon();
-
-	//get a file name
-	string whichFile(int selection);
-	string whichOutput(string option);
-
-	//format/structure
-	Head getHeader(string file);
-	pixel findPix(ifstream& file);
-	vector<pixel> inputPixels(ifstream& file);
-
-	//write it into the output file
-	void writeFile(ofstream& a, Head& b, vector<pixel> pixels);
-
-	//testing
-	void printPixels(vector<pixel> pix);
-};
-
-class pixel
-{
-	unsigned char red;
-	unsigned char green;
-	unsigned char blue;
-public:
-
-	pixel();
-	pixel(unsigned char red, unsigned char green, unsigned char blue);
-
-	unsigned char getRed();
-	unsigned char getGreen();
-	unsigned char getBlue();
-	void setRed(unsigned char red);
-	void setGreen(unsigned char green);
-	void setBlue(unsigned char blue);
-};
+				if (pixels[i].getRed() > pixels[i + 1].getRed()) // Swaps adjacent pixels
+				//if(current > p1)
+				{
+					swapped = true;
+					pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+			else if (color == "Green")
+			{
+				if (pixels[i].getGreen() > pixels[i + 1].getGreen()) // Swaps adjacent pixels
+				{
+					swapped = true;
+					pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+			else if (color == "Blue")
+			{
+				if (pixels[i].getBlue() > pixels[i + 1].getBlue()) // Swaps adjacent pixels
+				{
+					swapped = true;
+					pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+		}
+	}
+}
 
 Head::Head()
 {
@@ -245,10 +449,10 @@ string TGAdecon::whichFile(int option)
 }
 
 //select the output files
-string TGAdecon::whichOutput(string o)
+string TGAdecon::whichOutput(string o, string bubb)
 {
 	o = o.substr(14, string::npos);
-	string result = "./image_output/" + o;
+	string result = "./image_output/" + bubb + o;
 	return result;
 }
 
