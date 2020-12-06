@@ -70,6 +70,7 @@ public:
 void merge(vector<pixel>& pixelVec, string pixelColor, int left, int mid, int right);
 void mergeSort(vector<pixel>& pixelVec, string pixelColor, int left, int right);
 void BubbleSort(vector<pixel>& pixels, string color);
+float saturation(pixel p, string op);
 
 int main()
 {
@@ -400,6 +401,11 @@ void BubbleSort(vector<pixel>& pixels, string color)
 			}
 		}
 	}
+}
+
+float saturation(pixel p, string op) 
+{
+	return 0.0;
 }
 
 Head::Head()
