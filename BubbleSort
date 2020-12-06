@@ -1,0 +1,43 @@
+void BubbleSort(vector<Pixel> &pixels, string color)
+{
+	bool swapped = true;
+
+	while (swapped)
+	{
+		swapped = false;
+
+		for (unsigned int i = 0; i < pixels.size() - 1; i++)
+		{
+			if (color == "Red")
+			{
+				if (pixels[i].getRed() > pixels[i + 1].getBlue()) // Swaps adjacent pixels
+				{
+					swapped = true;
+					Pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+			else if (color == "Green")
+			{
+				if (pixels[i].getGreen() > pixels[i + 1].getGreen()) // Swaps adjacent pixels
+				{
+					swapped = true;
+					Pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+			else if (color == "Blue")
+			{
+				if (pixels[i].getBlue() > pixels[i + 1].getBlue()) // Swaps adjacent pixels
+				{
+					swapped = true;
+					Pixel tempPix = pixels[i];
+					pixels[i] = pixels[i + 1];
+					pixels[i + 1] = tempPix;
+				}
+			}
+		}
+	}
+}
