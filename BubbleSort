@@ -10,7 +10,7 @@ void BubbleSort(vector<Pixel> &pixels, string color)
 		{
 			if (color == "Red")
 			{
-				if (pixels[i].getRed() > pixels[i + 1].getBlue()) // Swaps adjacent pixels
+				if (pixels[i].getRed() > pixels[i + 1].getRed()) // Swaps adjacent pixels
 				{
 					swapped = true;
 					Pixel tempPix = pixels[i];
