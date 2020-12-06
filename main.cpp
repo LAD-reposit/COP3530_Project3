@@ -67,7 +67,7 @@ int main()
 			// STOP TIMER, START NEW TIMER
 			int size = sizeof(pixels) / sizeof(pixels[0].getRed());
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Red", 0, size - 1);
+			MergeSort(pixels, "Red", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -82,7 +82,7 @@ int main()
 			// STOP TIMER, START NEW TIMER
 			int size = sizeof(pixels) / sizeof(pixels[0].getGreen());
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Green", 0, size - 1);
+			MergeSort(pixels, "Green", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -97,7 +97,7 @@ int main()
 			// STOP TIMER, START NEW TIMER
 			int size = sizeof(pixels) / sizeof(pixels[0].getBlue());
 			auto startMerge = high_resolution_clock::now();
-			// MergeSort(pixels, "Blue", 0, size - 1);
+			MergeSort(pixels, "Blue", 0, size - 1);
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
