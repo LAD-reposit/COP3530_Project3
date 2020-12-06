@@ -1,5 +1,6 @@
 using namespace std;
 #include <vector>
+#include <string>
 
 class Pixels{
     private:
@@ -10,7 +11,7 @@ class Pixels{
 
 //sources: Sorting 2 powerpoint by Professor Kapoor
 
-void Pixels::merge(vector<Pixels> pixelVec, int left, int mid, int right){
+void Pixels::merge(vector<Pixels> pixelVec, string getPixelColor, int left, int mid, int right){
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
@@ -52,11 +53,11 @@ void Pixels::merge(vector<Pixels> pixelVec, int left, int mid, int right){
     }
 }
 
-void Pixels::mergeSort(vector<Pixels> pixelVec, int left, int right){
+void Pixels::mergeSort(vector<Pixels> pixelVec, string getPixelColor, int left, int right){
     if (left < right){
         int mid = left +(right - left)/2;
-        mergeSort(pixelVec, left, mid);
-        mergeSort(pixelVec, mid + 1, right);
-        merge(pixelVec, left, mid, right);
+        mergeSort(pixelVec, getPixelColor, left, mid);
+        mergeSort(pixelVec,getPixelColor, mid + 1, right);
+        merge(pixelVec, getPixelColor, left, mid, right);
     }
 }
