@@ -8,6 +8,8 @@ class Pixels{
         void merge(vector<Pixels> pixelVec, int left, int mid, int right);
 };
 
+//sources: Sorting 2 powerpoint by Professor Kapoor
+
 void Pixels::merge(vector<Pixels> pixelVec, int left, int mid, int right){
     int n1 = mid - left + 1;
     int n2 = right - mid;
