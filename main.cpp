@@ -1,3 +1,9 @@
+#include <chrono>
+#incldue <vector>
+#include <iostream>
+#include <string> 
+using namespace std;
+using namespace std::chrono;
 int main()
 {
 	vector<Pixel> pixels;
@@ -36,20 +42,47 @@ int main()
 		if (choice == 1)
 		{
 			// START TIMER
+			auto startBubble = high_resolution_clock::now();
 			BubbleSort(pixels, "Red");
+			auto stopBubble = high_resolution_clock::now();
+			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble); 
 			// STOP TIMER, START NEW TIMER
-			// MergeSort(pixels, "Red");
+			int size = sizeof(pixels) / sizeof(pixels[0].getRed());
+			auto startMerge = high_resolution_clock::now();
+			// MergeSort(pixels, "Red", 0, size - 1);
+			auto stopMerge = high_resolution_clock::now();
+			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
 		}
 		else if (choice == 2)
 		{
+			// START TIMER
+			auto startBubble = high_resolution_clock::now();
 			BubbleSort(pixels, "Green");
-			// MergeSort(pixels, "Green");
+			auto stopBubble = high_resolution_clock::now();
+			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble); 
+			// STOP TIMER, START NEW TIMER
+			int size = sizeof(pixels) / sizeof(pixels[0].getGreen());
+			auto startMerge = high_resolution_clock::now();
+			// MergeSort(pixels, "Green", 0, size - 1);
+			auto stopMerge = high_resolution_clock::now();
+			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
+			// STOP TIMER
 		}
 		else if (choice == 3)
 		{
+			// START TIMER
+			auto startBubble = high_resolution_clock::now();
 			BubbleSort(pixels, "Blue");
-			// MergeSort(pixels, "Blue");
+			auto stopBubble = high_resolution_clock::now();
+			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble); 
+			// STOP TIMER, START NEW TIMER
+			int size = sizeof(pixels) / sizeof(pixels[0].getBlue());
+			auto startMerge = high_resolution_clock::now();
+			// MergeSort(pixels, "Blue", 0, size - 1);
+			auto stopMerge = high_resolution_clock::now();
+			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
+			// STOP TIMER
 		}
 		else if (choice == 4)
 		{
@@ -60,8 +93,8 @@ int main()
 			cout << "Invalid Response." << endl;
 
 		// DISPLAY GRADIENT
-		cout << "Running time for Bubble Sort: " << endl; // DISPLAY BUBBLE SORT TIME
-		cout << "Running time for Merge Sort: " << endl; // DISPLAY MERGE SORT TIME
+		cout << "Running time for Bubble Sort: " <<bubbleTime<< endl; // DISPLAY BUBBLE SORT TIME
+		cout << "Running time for Merge Sort: " <<mergeTime<< endl; // DISPLAY MERGE SORT TIME
 
 		if (mergeTime < bubbleTime)
 		{
