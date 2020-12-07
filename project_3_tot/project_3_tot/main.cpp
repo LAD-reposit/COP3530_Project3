@@ -2,8 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
-#include <string>
-#include <SFML/Graphics.hpp>
+#include <string> 
 using namespace std;
 using namespace std::chrono;
 
@@ -72,14 +71,12 @@ void merge(vector<pixel>& pixelVec, string pixelColor, int left, int mid, int ri
 void mergeSort(vector<pixel>& pixelVec, string pixelColor, int left, int right);
 void BubbleSort(vector<pixel>& pixels, string color);
 float saturation(pixel p, string op);
-void DisplayImage(string image, string sortMethod);
 
 int main()
 {
 	vector<pixel> pixels_merge;
 	vector<pixel> pixels_bubble;
 	int choice;
-	string imageName;
 	bool running = true;
 	string selection = "";
 	TGAdecon file;
@@ -93,23 +90,14 @@ int main()
 		cout << "4. Quit" << endl;
 		cin >> choice;
 		if (choice == 1)
-		{
 			// READ IN COLOR EXPLOSION TO VECTOR OF PIXELS
 			selection = "./image_input/color_explosion.tga";
-			imageName = "Color Explosion";
-		}
 		else if (choice == 2)
-		{
 			// READ IN MICKEY MOUSE TO VECTOR OF PIXELS
 			selection = "./image_input/MickeyMouse.tga";
-			imageName = "Mickey Mouse";
-		}
 		else if (choice == 3)
-		{
 			// READ IN BUCHAREST TO VECTOR OF PIXELS
 			selection = "./image_input/map.tga";
-			imageName = "Bucharest";
-		}
 		else if (choice == 4)
 		{
 			running = false;
@@ -129,7 +117,6 @@ int main()
 			pixels_merge = file.inputPixels(fil);
 			pixels_bubble = pixels_merge;
 			fil.close();
-			cout << "FILE LOADED" << endl;
 		}
 
 		cout << "Which color would you like to sort by?" << endl;
@@ -144,17 +131,13 @@ int main()
 		{
 			// START TIMER
 			auto startBubble = high_resolution_clock::now();
-			cout << "BUBBLE SORT BEGINNING" << endl;
 			BubbleSort(pixels_bubble, "Red");
-			cout << "BUBBLE SORT FINISHED" << endl;
 			auto stopBubble = high_resolution_clock::now();
 			bubbleTime = duration_cast<microseconds>(stopBubble - startBubble);
 			// STOP TIMER, START NEW TIMER
 			int size = pixels_merge.size();
 			auto startMerge = high_resolution_clock::now();
-			cout << "MERGE SORT BEGINNING" << endl;
 			mergeSort(pixels_merge, "Red", 0, size - 1);
-			cout << "MERGE SORT FINISHED" << endl;
 			auto stopMerge = high_resolution_clock::now();
 			mergeTime = duration_cast<microseconds>(stopMerge - startMerge);
 			// STOP TIMER
@@ -198,7 +181,7 @@ int main()
 			cout << "Invalid Response." << endl;
 
 		// WRITE SORTED PIXELS TO FILE
-		//file.printPixels(pixels_merge);
+		file.printPixels(pixels_merge);
 		string merg = "merge_";
 		string bubb = "bubble_";
 
@@ -215,40 +198,16 @@ int main()
 		cl.close();
 
 		// DISPLAY GRADIENT
-		bool displaying = true;
-		string sortMethod;
-		while (displaying)
-		{
-			cout << "Which sorted image would you like to view?" << endl;
-			cout << "1. Merge Sort" << endl;
-			cout << "2. Bubble Sort" << endl;
-			cout << "3. Restart" << endl;
-			cin >> choice;
-			if (choice == 1)
-				DisplayImage(imageName, "Merge");
-			else if (choice == 2)
-				DisplayImage(imageName, "Bubble");
-			else if (choice == 3)
-				displaying = false;
-			else
-				cout << "Invalid Response" << endl;
-
-		}
-
 		cout << "Running time for Bubble Sort: " << bubbleTime.count() << endl; // DISPLAY BUBBLE SORT TIME
 		cout << "Running time for Merge Sort: " << mergeTime.count() << endl; // DISPLAY MERGE SORT TIME
 
-		float mergeDuration = (float)mergeTime.count();
-		float bubbleDuration = (float)bubbleTime.count();
-		float ratio = 100 * (bubbleDuration / mergeDuration);
-
 		if (mergeTime < bubbleTime)
 		{
-			cout << "Merge Sort was " << ratio << "% faster than Bubble Sort." << endl;
+			cout << "Merge Sort was " << (mergeTime / bubbleTime) * 100 << "% faster than Bubble Sort." << endl;
 		}
 		else
 		{
-			cout << "Bubble Sort was " << (float)((bubbleTime / mergeTime) * (long)100.000) << "% faster than Merge Sort." << endl;
+			cout << "Bubble Sort was " << (bubbleTime / mergeTime) * 100 << "% faster than Merge Sort." << endl;
 		}
 
 	}
@@ -408,7 +367,11 @@ void BubbleSort(vector<pixel>& pixels, string color)
 		{
 			if (color == "Red")
 			{
+				//unsigned char current = (pixels[i].getRed() - (pixels[i].getBlue() + pixels[i].getGreen()));
+				//unsigned char p1 = pixels[i + 1].getRed() - (pixels[i + 1].getBlue() + pixels[i + 1].getGreen());
+
 				if (pixels[i].getRed() > pixels[i + 1].getRed()) // Swaps adjacent pixels
+				//if(current > p1)
 				{
 					swapped = true;
 					pixel tempPix = pixels[i];
@@ -440,104 +403,9 @@ void BubbleSort(vector<pixel>& pixels, string color)
 	}
 }
 
-float saturation(pixel p, string op)
+float saturation(pixel p, string op) 
 {
 	return 0.0;
-}
-
-void DisplayImage(string image, string sortMethod)
-{
-	if (image == "Color Explosion")
-	{
-		sf::RenderWindow window(sf::VideoMode(1000, 1000), "Color Explosion Gradient");
-		sf::Texture gradientTexture;
-		string filePath;
-
-		if (sortMethod == "Bubble")
-			filePath = "./image_output/bubble_color_explosion.tga";
-		else
-			filePath = "./image_output/merge_color_explosion.tga";
-
-		gradientTexture.loadFromFile(filePath);
-		sf::Sprite gradient(gradientTexture);
-
-		while (window.isOpen())
-		{
-			window.clear();
-
-			sf::Event event;
-			while (window.pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-					window.close();
-			}
-			gradient.setOrigin(gradient.getTextureRect().width / 2, gradient.getTextureRect().height / 2);
-			gradient.setPosition(500, 500);
-			window.draw(gradient);
-			window.display();
-		}
-	}
-	else if (image == "Mickey Mouse")
-	{
-		sf::RenderWindow window(sf::VideoMode(1600, 1200), "Mickey Mouse Gradient");
-		sf::Texture gradientTexture;
-		string filePath;
-
-		if (sortMethod == "Bubble")
-			filePath = "./image_output/bubble_mickey_mouse.tga";
-		else
-			filePath = "./image_output/merge_mickey_mouse.tga";
-
-		gradientTexture.loadFromFile(filePath);
-		sf::Sprite gradient(gradientTexture);
-
-		while (window.isOpen())
-		{
-			window.clear();
-
-			sf::Event event;
-			while (window.pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-					window.close();
-			}
-
-			gradient.setOrigin(gradient.getTextureRect().width / 2, gradient.getTextureRect().height / 2);
-			gradient.setPosition(800, 600);
-			window.draw(gradient);
-			window.display();
-		}
-	}
-	else if (image == "Bucharest")
-	{
-		sf::RenderWindow window(sf::VideoMode(10916, 9985), "Bucharest Gradient");
-		sf::Texture gradientTexture;
-		string filePath;
-
-		if (sortMethod == "Bubble")
-			filePath = "./image_output/bubble_bucharest.tga";
-		else
-			filePath = "./image_output/merge_bucharest.tga";
-
-		gradientTexture.loadFromFile(filePath);
-		sf::Sprite gradient(gradientTexture);
-
-		while (window.isOpen())
-		{
-			window.clear();
-
-			sf::Event event;
-			while (window.pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-					window.close();
-			}
-
-			gradient.setPosition(0, 0);
-			window.draw(gradient);
-			window.display();
-		}
-	}
 }
 
 Head::Head()
@@ -605,18 +473,18 @@ Head TGAdecon::getHeader(string fileLocation)
 	if (!file.is_open()) { cout << "Error! File " << current << " is not open." << endl; }
 	if (file.is_open())
 	{
-		file.read((char*)&head.idLength, sizeof(head.idLength));
-		file.read((char*)&head.colorMapType, sizeof(head.colorMapType));
-		file.read((char*)&head.dataTypeCode, sizeof(head.dataTypeCode));
-		file.read((char*)&head.colorMapOrigin, sizeof(head.colorMapOrigin));
-		file.read((char*)&head.colorMapLength, sizeof(head.colorMapLength));
-		file.read((char*)&head.colorMapDepth, sizeof(head.colorMapDepth));
-		file.read((char*)&head.xOrigin, sizeof(head.xOrigin));
-		file.read((char*)&head.yOrigin, sizeof(head.yOrigin));
-		file.read((char*)&head.width, sizeof(head.width));
-		file.read((char*)&head.height, sizeof(head.height));
-		file.read((char*)&head.bitsPerPixel, sizeof(head.bitsPerPixel));
-		file.read((char*)&head.imageDescriptor, sizeof(head.imageDescriptor));
+		file.read((char*)& head.idLength, sizeof(head.idLength));
+		file.read((char*)& head.colorMapType, sizeof(head.colorMapType));
+		file.read((char*)& head.dataTypeCode, sizeof(head.dataTypeCode));
+		file.read((char*)& head.colorMapOrigin, sizeof(head.colorMapOrigin));
+		file.read((char*)& head.colorMapLength, sizeof(head.colorMapLength));
+		file.read((char*)& head.colorMapDepth, sizeof(head.colorMapDepth));
+		file.read((char*)& head.xOrigin, sizeof(head.xOrigin));
+		file.read((char*)& head.yOrigin, sizeof(head.yOrigin));
+		file.read((char*)& head.width, sizeof(head.width));
+		file.read((char*)& head.height, sizeof(head.height));
+		file.read((char*)& head.bitsPerPixel, sizeof(head.bitsPerPixel));
+		file.read((char*)& head.imageDescriptor, sizeof(head.imageDescriptor));
 	}
 	file.close();
 	return head;
@@ -627,9 +495,9 @@ pixel TGAdecon::findPix(ifstream& file)
 	unsigned char red;
 	unsigned char green;
 	unsigned char blue;
-	file.read((char*)&blue, sizeof(blue));
-	file.read((char*)&green, sizeof(green));
-	file.read((char*)&red, sizeof(red));
+	file.read((char*)& blue, sizeof(blue));
+	file.read((char*)& green, sizeof(green));
+	file.read((char*)& red, sizeof(red));
 
 	pixel pix(red, green, blue);
 
@@ -651,27 +519,27 @@ vector<pixel> TGAdecon::inputPixels(ifstream& file)
 //add a header to the output file
 void TGAdecon::writeFile(ofstream& file, Head& head, vector<pixel> pixels)
 {
-	file.write((char*)&head.idLength, sizeof(head.idLength));
-	file.write((char*)&head.colorMapType, sizeof(head.colorMapType));
-	file.write((char*)&head.dataTypeCode, sizeof(head.dataTypeCode));
-	file.write((char*)&head.colorMapOrigin, sizeof(head.colorMapOrigin));
-	file.write((char*)&head.colorMapLength, sizeof(head.colorMapLength));
-	file.write((char*)&head.colorMapDepth, sizeof(head.colorMapDepth));
-	file.write((char*)&head.xOrigin, sizeof(head.xOrigin));
-	file.write((char*)&head.yOrigin, sizeof(head.yOrigin));
-	file.write((char*)&head.width, sizeof(head.width));
-	file.write((char*)&head.height, sizeof(head.height));
-	file.write((char*)&head.bitsPerPixel, sizeof(head.bitsPerPixel));
-	file.write((char*)&head.imageDescriptor, sizeof(head.imageDescriptor));
+	file.write((char*)& head.idLength, sizeof(head.idLength));
+	file.write((char*)& head.colorMapType, sizeof(head.colorMapType));
+	file.write((char*)& head.dataTypeCode, sizeof(head.dataTypeCode));
+	file.write((char*)& head.colorMapOrigin, sizeof(head.colorMapOrigin));
+	file.write((char*)& head.colorMapLength, sizeof(head.colorMapLength));
+	file.write((char*)& head.colorMapDepth, sizeof(head.colorMapDepth));
+	file.write((char*)& head.xOrigin, sizeof(head.xOrigin));
+	file.write((char*)& head.yOrigin, sizeof(head.yOrigin));
+	file.write((char*)& head.width, sizeof(head.width));
+	file.write((char*)& head.height, sizeof(head.height));
+	file.write((char*)& head.bitsPerPixel, sizeof(head.bitsPerPixel));
+	file.write((char*)& head.imageDescriptor, sizeof(head.imageDescriptor));
 
 	for (int i = 0; i < pixels.size(); i++)
 	{
 		unsigned char r = pixels.at(i).getRed();
 		unsigned char g = pixels.at(i).getGreen();
 		unsigned char b = pixels.at(i).getBlue();
-		file.write((char*)&b, sizeof(unsigned char));
-		file.write((char*)&g, sizeof(unsigned char));
-		file.write((char*)&r, sizeof(unsigned char));
+		file.write((char*)& b, sizeof(unsigned char));
+		file.write((char*)& g, sizeof(unsigned char));
+		file.write((char*)& r, sizeof(unsigned char));
 	}
 }
 
