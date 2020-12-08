@@ -1,0 +1,10 @@
+﻿  main.cpp
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(472,93): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(472,55): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(503,93): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(503,55): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(534,93): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(534,55): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(666,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\19044\source\repos\Gradient Bubble Sort\Gradient Bubble Sort\main.cpp(680,20): warning C4018: '<': signed/unsigned mismatch
+  Gradient Bubble Sort.vcxproj -> C:\Users\19044\source\repos\Gradient Bubble Sort\Debug\Gradient Bubble Sort.exe
