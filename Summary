@@ -1,3 +1,26 @@
-This is the most groundbreaking project to ever exist
-Correct
-True
+The full project is in the Gradient Bubble Sort Folder.
+The source code to the main.cpp can be found at:
+./Gradient Bubble Sort/Gradient Bubble Sort/main.cpp
+
+
+In order to run it locally, you need to install SFML, here is a
+the resource we used to install it:
+	https://www.youtube.com/watch?v=YfMQyOw1zik&feature=youtu.be
+
+
+**********************************************
+              Summary
+
+This project was designed to show how
+bubble and merge sort can can be used to
+sort pixels based on their rgb data. This 
+project is especially useful at showing how
+the original placement of values in an array
+can affect the outcome of the sorted array
+when there are duplicate values scattered 
+throughout the data.
+
+This was a submission for our Data Structures
+and algorithms class.
+
+**********************************************
