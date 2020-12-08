@@ -2,4 +2,4 @@
 Pixel Sorting |
 SFML Library is required for this |
 Use this video to download: https://www.youtube.com/watch?v=YfMQyOw1zik&feature=youtu.be | 
-FINAL MAIN IS GRADIENT BUBBLE SOURCE FILE |
+FINAL MAIN IS GRADIENT BUBBLE SORT FILE |
